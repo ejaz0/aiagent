@@ -9,8 +9,8 @@ class Calculator:
         self.precedence = {
             "+": 1,
             "-": 1,
-            "*": 2,
-            "/": 2,
+            "*": 3,
+            "/": 3,
         }
 
     def evaluate(self, expression):
