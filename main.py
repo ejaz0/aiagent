@@ -3,7 +3,7 @@ import os
 from google import genai
 from google.genai import types
 from dotenv import load_dotenv
-
+from call_function import available_functions, call_function
 from prompts import system_prompt
 from call_function import available_functions
 
@@ -51,7 +51,12 @@ def generate_content(client, messages, verbose):
         return response.text
 
     for function_call_part in response.function_calls:
-        print(f"Calling function: {function_call_part.name}({function_call_part.args})")
+        call = call_function(function_call_part, verbose)
+        response_part = call.parts[0]
+        if not hasattr(response_part, "function_response") or not hasattr(response_part.function_response, "response"):
+            raise Exception("Function response missing from call_function result!")
+        if verbose:
+            print(f"-> {response_part.function_response.response}")
 
 
 if __name__ == "__main__":
